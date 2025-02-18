@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yearbook</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .yearbook-container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #1e3a8a;
+            text-align: center;
+        }
+
+        .month-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 20px;
+        }
+
+        .month-content {
+            width: 45%;
+        }
+
+        .month-images {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .month-images img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .month-texts {
+            margin-top: 15px;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .navigation-buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #1e6091;
+            color: white;
+            font-size: 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #184e77;
+        }
+    </style>
+</head>
+<body>
+    <div class="yearbook-container">
+        <h1>Yearbook</h1>
+        <div id="monthContent"></div>
+
+        <div class="navigation-buttons">
+            <button id="prevBtn">Previous</button>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <script>
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        let currentMonthIndex = 0;
+        let memories = JSON.parse(localStorage.getItem("memories")) || {};
+
+        // Function to display the yearbook content
+        function displayYearbook() {
+            const monthContent = document.getElementById("monthContent");
+            const month = months[currentMonthIndex];
+
+            // Clear previous content
+            monthContent.innerHTML = "";
+
+            const monthContainer = document.createElement("div");
+            monthContainer.className = "month-container";
+
+            // Left section for month title and images
+            const monthContentDiv = document.createElement("div");
+            monthContentDiv.className = "month-content";
+
+            const monthTitle = document.createElement("h2");
+            monthTitle.innerText = `${month} Memories`;
+            monthContentDiv.appendChild(monthTitle);
+
+            const monthImagesDiv = document.createElement("div");
+            monthImagesDiv.className = "month-images";
+            memories[month].images.forEach((imgSrc, index) => {
+                const img = document.createElement("img");
+                img.src = imgSrc;
+                img.alt = `${month} Photo ${index + 1}`;
+                monthImagesDiv.appendChild(img);
+            });
+            monthContentDiv.appendChild(monthImagesDiv);
+
+            // Right section for image descriptions
+            const monthTextsDiv = document.createElement("div");
+            monthTextsDiv.className = "month-texts";
+            memories[month].texts.forEach((text, index) => {
+                const paragraph = document.createElement("p");
+                paragraph.innerHTML = `<strong>Photo ${index + 1}:</strong> ${text}`;
+                monthTextsDiv.appendChild(paragraph);
+            });
+            monthContentDiv.appendChild(monthTextsDiv);
+
+            // Append the content to the main container
+            monthContainer.appendChild(monthContentDiv);
+            monthContent.appendChild(monthContainer);
+        }
+
+        // Navigation button functionality
+        document.getElementById("prevBtn").addEventListener("click", function () {
+            if (currentMonthIndex > 0) {
+                currentMonthIndex--;
+                displayYearbook();
+            }
+        });
+
+        document.getElementById("nextBtn").addEventListener("click", function () {
+            if (currentMonthIndex < months.length - 1) {
+                currentMonthIndex++;
+                displayYearbook();
+            }
+        });
+
+        // Initial display of the first month's content
+        displayYearbook();
+    </script>
+</body>
+</html>

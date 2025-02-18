@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Yearbook</title>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+        <style>
+            #flipbook {
+                width: 800px;
+                height: 500px;
+                margin: auto;
+            }
+            .page {
+                background: white;
+                padding: 20px;
+                border: 1px solid #ccc;
+            }
+            .photo {
+                width: 100%;
+                height: auto;
+                margin-bottom: 10px;
+            }
+        </style>
+    </head>
+    <body class="bg-gray-100 py-10">
+
+    <div id="flipbook">
+        {% for month, photos in yearbook_data.items() %}
+        <div class="page">
+            <h2 class="text-xl font-bold mb-4">{{ month }}</h2>
+            {% for photo in photos %}
+            <img src="{{ photo }}" class="photo" alt="Photo for {{ month }}">
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#flipbook").turn({
+                width: 800,
+                height: 500,
+                autoCenter: true
+            });
+        });
+    </script>
+
+    </body>
+    </html>
